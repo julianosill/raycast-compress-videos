@@ -9,14 +9,14 @@ async function getVideoDuration(filePath: string): Promise<number> {
       "-show_entries",
       "format=duration",
       "-of",
-      "default=noprint_wrappers=1:nokey=1", 
+      "default=noprint_wrappers=1:nokey=1",
       filePath,
     ])
 
     let stdout = ""
     let stderr = ""
 
-    ffprobe.stdout.on("data", (data) => stdout += data.toString())
+    ffprobe.stdout.on("data", (data) => (stdout += data.toString()))
     ffprobe.stderr.on("data", (data) => (stderr += data.toString()))
 
     ffprobe.on("close", (code) => {
@@ -91,8 +91,7 @@ export default async function Command() {
             return resolve()
           }
 
-          toast.style = Toast.Style.Failure,
-          toast.title = "Compression failed"
+          ;(toast.style = Toast.Style.Failure), (toast.title = "Compression failed")
           toast.message = `Failed to compress ${fileName}`
           reject(new Error(`FFmpeg process exited with code ${code}`))
         })
