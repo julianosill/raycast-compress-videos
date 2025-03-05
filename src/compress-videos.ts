@@ -1,40 +1,15 @@
 import { getPreferenceValues, getSelectedFinderItems, showToast, Toast } from "@raycast/api"
-import { spawn } from "child_process"
+import { spawn } from "node:child_process"
+
+import { getUniqueOutputPath, getVideoDuration } from "./utils"
 
 interface Preferences {
-  crf_value: string;
-}
-
-async function getVideoDuration(filePath: string): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const ffprobe = spawn("/opt/homebrew/bin/ffprobe", [
-      "-v",
-      "error",
-      "-show_entries",
-      "format=duration",
-      "-of",
-      "default=noprint_wrappers=1:nokey=1",
-      filePath,
-    ])
-
-    let stdout = ""
-    let stderr = ""
-
-    ffprobe.stdout.on("data", (data) => (stdout += data.toString()))
-    ffprobe.stderr.on("data", (data) => (stderr += data.toString()))
-
-    ffprobe.on("close", (code) => {
-      if (code === 0) return resolve(parseFloat(stdout.trim()))
-      reject(new Error(`ffprobe failed: ${stderr}`))
-    })
-
-    ffprobe.on("error", (err) => reject(err))
-  })
+  crf_value: string
 }
 
 export default async function Command() {
-  const preferences = getPreferenceValues<Preferences>();
-  const crfValue = preferences.crf_value;
+  const preferences = getPreferenceValues<Preferences>()
+  const crfValue = preferences.crf_value
   let filePaths: string[]
 
   try {
@@ -49,7 +24,7 @@ export default async function Command() {
 
     for (const filePath of filePaths) {
       const fileName = filePath.split("/").pop()
-      const outputPath = filePath.replace(/(\.\w+)$/, "_compressed$1")
+      const outputPath = getUniqueOutputPath(filePath)
 
       const toast = await showToast({
         style: Toast.Style.Animated,
