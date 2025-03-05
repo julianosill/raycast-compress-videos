@@ -17,6 +17,17 @@
       "mode": "no-view"
     }
   ],
+  "preferences": [
+    {
+      "name": "crf_value",
+      "type": "textfield",
+      "required": false,
+      "title": "CRF Value",
+      "description": "The CRF value for compression (e.g., 25). Lower values mean better quality.",
+      "placeholder": "25",
+      "default": "25"
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.93.0",
     "@raycast/utils": "^1.17.0"

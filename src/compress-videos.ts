@@ -1,5 +1,9 @@
-import { getSelectedFinderItems, showToast, Toast } from "@raycast/api"
+import { getPreferenceValues, getSelectedFinderItems, showToast, Toast } from "@raycast/api"
 import { spawn } from "child_process"
+
+interface Preferences {
+  crf_value: string;
+}
 
 async function getVideoDuration(filePath: string): Promise<number> {
   return new Promise((resolve, reject) => {
@@ -29,6 +33,8 @@ async function getVideoDuration(filePath: string): Promise<number> {
 }
 
 export default async function Command() {
+  const preferences = getPreferenceValues<Preferences>();
+  const crfValue = preferences.crf_value;
   let filePaths: string[]
 
   try {
@@ -60,7 +66,7 @@ export default async function Command() {
           "-c:v",
           "libx264",
           "-crf",
-          "25",
+          crfValue,
           "-preset",
           "medium",
           "-c:a",
