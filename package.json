@@ -15,6 +15,12 @@
       "title": "Compress Videos",
       "description": "Compress the selected videos in Finder with FFmpeg.",
       "mode": "no-view"
+    },
+    {
+      "name": "compress-and-resize-videos",
+      "title": "Compress and Resize Videos",
+      "description": "Compress and resize the selected videos in Finder with FFmpeg.",
+      "mode": "view"
     }
   ],
   "preferences": [
